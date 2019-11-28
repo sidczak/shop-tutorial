@@ -1,0 +1,37 @@
+# src/Application/ShopBundle/Resources/config/doctrine/Order.orm.yml
+Application\ShopBundle\Entity\Order:
+  type: entity
+  #repositoryClass: Application\ShopBundle\Repository\OrderRepository
+  table: order
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    shipping_address:
+      type: string
+      length: 255
+    billing_address:
+      type: string
+      length: 255
+    amount:
+      type: integer
+    status:
+      type: integer
+    created_at:
+      type: datetime
+  manyToOne:
+    user:
+      targetEntity: User
+      inversedBy: orders
+      #cascade: [ persist ]
+      joinColumn:
+        name: user_id
+        referencedColumnName: id
+  manyToMany:
+    products:
+      targetEntity: Product
+      mappedBy: orders
+      #cascade: [ persist ]
+  lifecycleCallbacks:
+    prePersist: [ setCreatedAtValue ]
